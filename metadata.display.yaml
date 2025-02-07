@@ -1,0 +1,309 @@
+apiVersion: blueprints.cloud.google.com/v1alpha1
+kind: BlueprintMetadata
+metadata:
+  annotations:
+    config.kubernetes.io/local-config: "true"
+  name: fortigate-terraform-deploy
+spec:
+  ui:
+    input:
+      sections:
+      - name: fortigate
+        subtext: FortiOS Version
+        title: FortiGate (BYOL)
+      - name: instance
+        title: Instance
+      - name: boot_disk
+        title: Boot Disk
+        tooltip: Each instance requires a disk to boot from.
+      - name: log_disk
+        title: Log Disk
+        tooltip: Log disk feature requires a disk to store log data.
+      - name: networking
+        title: Networking
+      variables:
+        boot_disk_size:
+          max: 10000
+          min: 10
+          name: boot_disk_size
+          section: boot_disk
+          title: Boot disk size in GB
+          tooltip: Persistent disk performance is tied to the size of the persistent
+            disk volume. You are charged for the actual amount of provisioned disk
+            space.
+          xGoogleProperty:
+            gceDiskSize:
+              diskTypeVariable: boot_disk_type
+            type: ET_GCE_DISK_SIZE
+        boot_disk_type:
+          name: boot_disk_type
+          section: boot_disk
+          title: Boot disk type
+          xGoogleProperty:
+            type: ET_GCE_DISK_TYPE
+            zoneProperty: zone
+        confidential_vm:
+          name: confidential_vm
+          section: instance
+          title: Enable Confidential VM (If Supported)
+          tooltip: Only n2d series machine type with 7.4.3 or above x64 images are
+            supported.
+        enable_ip_forward:
+          name: enable_ip_forward
+          section: networking
+          title: Enable IP Forward
+          tooltip: Forwarding allows the instance to help route packets. <a href="https://cloud.google.com/compute/docs/networking#canipforward">Learn
+            more</a>
+        enable_log_disk:
+          name: enable_log_disk
+          section: log_disk
+          title: Enable Log Disk
+          tooltip: Cloud Logging allows you to store, search, analyze, monitor, and
+            alert on log data and events. <a href="https://cloud.google.com/logging/">Learn
+            more</a>
+        enable_tcp_22:
+          name: enable_tcp_22
+          section: networking
+          title: Allow TCP port 22 traffic
+          xGoogleProperty:
+            gceFirewall:
+              networkVariable: networks
+            type: ET_GCE_FIREWALL
+        enable_tcp_80:
+          name: enable_tcp_80
+          section: networking
+          title: Allow HTTP traffic
+          xGoogleProperty:
+            gceFirewall:
+              networkVariable: networks
+            type: ET_GCE_FIREWALL
+        enable_tcp_443:
+          name: enable_tcp_443
+          section: networking
+          title: Allow HTTPS traffic
+          xGoogleProperty:
+            gceFirewall:
+              networkVariable: networks
+            type: ET_GCE_FIREWALL
+        enable_tcp_541:
+          name: enable_tcp_541
+          section: networking
+          title: Allow TCP port 541 traffic
+          xGoogleProperty:
+            gceFirewall:
+              networkVariable: networks
+            type: ET_GCE_FIREWALL
+        enable_tcp_3000:
+          name: enable_tcp_3000
+          section: networking
+          title: Allow TCP port 3000 traffic
+          xGoogleProperty:
+            gceFirewall:
+              networkVariable: networks
+            type: ET_GCE_FIREWALL
+        enable_tcp_8080:
+          name: enable_tcp_8080
+          section: networking
+          title: Allow TCP port 8080 traffic
+          xGoogleProperty:
+            gceFirewall:
+              networkVariable: networks
+            type: ET_GCE_FIREWALL
+        external_ips:
+          maxItems: 8
+          minItems: 1
+          name: external_ips
+          section: networking
+          title: External IP
+          tooltip: An external IP address associated with this instance. Selecting
+            "None" will result in the instance having no external internet access.
+            <a href="https://cloud.google.com/compute/docs/configure-instance-ip-addresses">Learn
+            more</a>
+          xGoogleProperty:
+            gceExternalIp:
+              allowStaticIps: true
+              networkVariable: networks
+              notConfigurable: false
+            type: ET_GCE_EXTERNAL_IP
+        goog_cm_deployment_name:
+          name: goog_cm_deployment_name
+          title: Goog Cm Deployment Name
+        log_disk_size:
+          max: 10000
+          min: 10
+          name: log_disk_size
+          section: log_disk
+          title: Log disk size in GB
+          tooltip: Persistent disk performance is tied to the size of the persistent
+            disk volume. You are charged for the actual amount of provisioned disk
+            space.
+          xGoogleProperty:
+            gceDiskSize:
+              diskTypeVariable: log_disk_type
+            type: ET_GCE_DISK_SIZE
+        log_disk_type:
+          name: log_disk_type
+          section: log_disk
+          title: log disk type
+          xGoogleProperty:
+            type: ET_GCE_DISK_TYPE
+            zoneProperty: zone
+        machine_type:
+          name: machine_type
+          section: instance
+          title: Machine type
+          xGoogleProperty:
+            gceMachineType:
+              diskImageProperty: source_image
+            type: ET_GCE_MACHINE_TYPE
+            zoneProperty: zone
+        networks:
+          maxItems: 8
+          minItems: 1
+          name: networks
+          section: networking
+          title: Network name
+          xGoogleProperty:
+            gceNetwork:
+              allowSharedVpcs: true
+              machineTypeVariable: machine_type
+            type: ET_GCE_NETWORK
+        project_id:
+          invisible: true
+          name: project_id
+          title: Project Id
+        shielded_vm:
+          name: shielded_vm
+          section: instance
+          title: Enable Shielded VM (If Supported)
+          tooltip: Only 7.2.4 or above x64 images are supported.
+        source_image:
+          enumValueLabels:
+          - label: 7.6.2
+            value: projects/mpi-fortigcp-project-001/global/images/fortinet-fgt-762-20250130-001-w-license
+          - label: 7.6.2 ARM64
+            value: projects/mpi-fortigcp-project-001/global/images/fortinet-fgt-arm64-762-20250130-001-w-license
+          - label: 7.6.1
+            value: projects/mpi-fortigcp-project-001/global/images/fortinet-fgt-761-20241128-001-w-license
+          - label: 7.6.1 ARM64
+            value: projects/mpi-fortigcp-project-001/global/images/fortinet-fgt-arm64-761-20241128-001-w-license
+          - label: 7.4.6
+            value: projects/mpi-fortigcp-project-001/global/images/fortinet-fgt-746-20241213-001-w-license
+          - label: 7.4.6 ARM64
+            value: projects/mpi-fortigcp-project-001/global/images/fortinet-fgt-arm64-746-20241213-001-w-license
+          - label: 7.4.7
+            value: projects/mpi-fortigcp-project-001/global/images/fortinet-fgt-747-20250123-001-w-license
+          - label: 7.4.7 ARM64
+            value: projects/mpi-fortigcp-project-001/global/images/fortinet-fgt-arm64-747-20250123-001-w-license
+          - label: 7.2.9
+            value: projects/mpi-fortigcp-project-001/global/images/fortinet-fgt-729-20240816-001-w-license
+          - label: 7.2.9 ARM64
+            value: projects/mpi-fortigcp-project-001/global/images/fortinet-fgt-arm64-729-20240816-001-w-license
+          - label: 7.2.10
+            value: projects/mpi-fortigcp-project-001/global/images/fortinet-fgt-7210-20240920-001-w-license
+          - label: 7.2.10 ARM64
+            value: projects/mpi-fortigcp-project-001/global/images/fortinet-fgt-arm64-7210-20240920-001-w-license
+          - label: 7.0.17
+            value: projects/mpi-fortigcp-project-001/global/images/fortinet-fgt-7017-20250116-001-w-license
+          - label: 6.4.15
+            value: projects/mpi-fortigcp-project-001/global/images/fortinet-fgt-6415-20240208-001-w-license
+          name: source_image
+          section: fortigate
+          title: Image Version
+          xGoogleProperty:
+            type: ET_GCE_DISK_IMAGE
+        sub_networks:
+          maxItems: 8
+          minItems: 1
+          name: sub_networks
+          section: networking
+          title: Subnetwork name
+          xGoogleProperty:
+            gceSubnetwork:
+              networkVariable: networks
+            type: ET_GCE_SUBNETWORK
+            zoneProperty: zone
+        tcp_22_ip_source_ranges:
+          name: tcp_22_ip_source_ranges
+          placeholder: 0.0.0.0/0, 192.169.0.2/24
+          section: networking
+          title: Source IP ranges for SSH traffic
+          tooltip: Traffic is only allowed from sources within these IP address ranges.
+            Use CIDR notation when entering ranges. <a href="https://cloud.google.com/compute/docs/networking#firewalls">Learn
+            more</a>
+          xGoogleProperty:
+            gceFirewallRange:
+              firewallVariable: enable_tcp_22
+            type: ET_GCE_FIREWALL_RANGE
+        tcp_80_ip_source_ranges:
+          name: tcp_80_ip_source_ranges
+          placeholder: 0.0.0.0/0, 192.169.0.2/24
+          section: networking
+          title: Source IP ranges for HTTP traffic
+          tooltip: Traffic is only allowed from sources within these IP address ranges.
+            Use CIDR notation when entering ranges. <a href="https://cloud.google.com/compute/docs/networking#firewalls">Learn
+            more</a>
+          xGoogleProperty:
+            gceFirewallRange:
+              firewallVariable: enable_tcp_80
+            type: ET_GCE_FIREWALL_RANGE
+        tcp_443_ip_source_ranges:
+          name: tcp_443_ip_source_ranges
+          placeholder: 0.0.0.0/0, 192.169.0.2/24
+          section: networking
+          title: Source IP ranges for HTTPS traffic
+          tooltip: Traffic is only allowed from sources within these IP address ranges.
+            Use CIDR notation when entering ranges. <a href="https://cloud.google.com/compute/docs/networking#firewalls">Learn
+            more</a>
+          xGoogleProperty:
+            gceFirewallRange:
+              firewallVariable: enable_tcp_443
+            type: ET_GCE_FIREWALL_RANGE
+        tcp_541_ip_source_ranges:
+          name: tcp_541_ip_source_ranges
+          placeholder: 0.0.0.0/0, 192.169.0.2/24
+          section: networking
+          title: Source IP ranges for TCP541 traffic
+          tooltip: Traffic is only allowed from sources within these IP address ranges.
+            Use CIDR notation when entering ranges. <a href="https://cloud.google.com/compute/docs/networking#firewalls">Learn
+            more</a>
+          xGoogleProperty:
+            gceFirewallRange:
+              firewallVariable: enable_tcp_541
+            type: ET_GCE_FIREWALL_RANGE
+        tcp_3000_ip_source_ranges:
+          name: tcp_3000_ip_source_ranges
+          placeholder: 0.0.0.0/0, 192.169.0.2/24
+          section: networking
+          title: Source IP ranges for TCP 3000 traffic
+          tooltip: Traffic is only allowed from sources within these IP address ranges.
+            Use CIDR notation when entering ranges. <a href="https://cloud.google.com/compute/docs/networking#firewalls">Learn
+            more</a>
+          xGoogleProperty:
+            gceFirewallRange:
+              firewallVariable: enable_tcp_3000
+            type: ET_GCE_FIREWALL_RANGE
+        tcp_8080_ip_source_ranges:
+          name: tcp_8080_ip_source_ranges
+          placeholder: 0.0.0.0/0, 192.169.0.2/24
+          section: networking
+          title: Source IP ranges for TCP 8080 traffic
+          tooltip: Traffic is only allowed from sources within these IP address ranges.
+            Use CIDR notation when entering ranges. <a href="https://cloud.google.com/compute/docs/networking#firewalls">Learn
+            more</a>
+          xGoogleProperty:
+            gceFirewallRange:
+              firewallVariable: enable_tcp_8080
+            type: ET_GCE_FIREWALL_RANGE
+        vm_service_account:
+          name: vm_service_account
+          section: instance
+          title: Custom Service Account
+          tooltip: The email of the service account for the FortiGate VM to call Google
+            Cloud APIs. (Leave it blank to use the default compute service account.)
+        zone:
+          name: zone
+          section: fortigate
+          title: Zone
+          xGoogleProperty:
+            type: ET_GCE_ZONE

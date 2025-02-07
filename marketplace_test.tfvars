@@ -1,0 +1,9 @@
+goog_cm_deployment_name   = "test-deployment"
+tcp_8080_ip_source_ranges = ""
+tcp_3000_ip_source_ranges = ""
+tcp_541_ip_source_ranges  = ""
+tcp_443_ip_source_ranges  = ""
+tcp_80_ip_source_ranges   = ""
+tcp_22_ip_source_ranges   = ""
+enable_log_disk           = true
+vm_service_account        = ""

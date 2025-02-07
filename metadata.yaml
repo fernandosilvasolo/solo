@@ -1,0 +1,171 @@
+apiVersion: blueprints.cloud.google.com/v1alpha1
+kind: BlueprintMetadata
+metadata:
+  annotations:
+    autogenSpecType: SINGLE_VM
+    config.kubernetes.io/local-config: "true"
+  name: marketplace-tools
+spec:
+  content: {}
+  info:
+    actuationTool:
+      flavor: Terraform
+      version: '>= 1.2'
+    description: {}
+    title: FortiGate Next-Generation Firewall (BYOL)
+    version: "1.0"
+  interfaces:
+    outputs:
+    - description: Admin username for FortiGate
+      name: admin_user
+    - description: Password for the admin user
+      name: admin_password
+    - description: Flag to indicate if the FortiGate machine has an external IP
+      name: has_external_ip
+    - description: Machine type for the FortiGate compute instance
+      name: instance_machine_type
+    - description: Machine type for the FortiGate compute instance
+      name: instance_nat_ip
+    - description: Machine type for the FortiGate compute instance
+      name: instance_network
+    - description: Self-link for the FortiGate compute instance
+      name: instance_self_link
+    - description: Zone for the FortiGate compute instance
+      name: instance_zone
+    - description: ARM based VM image
+      name: arm64_image
+    - description: Shielded VM Enabled
+      name: shielded_vm_enabled
+    - description: Confidential VM Enabled
+      name: confidential_vm_enabled
+    variables:
+    - defaultValue: "10"
+      description: The boot disk size for the VM instance in GBs
+      name: boot_disk_size
+      varType: string
+    - defaultValue: pd-ssd
+      description: The boot disk type for the VM instance.
+      name: boot_disk_type
+      varType: string
+    - defaultValue: false
+      description: Enable Confidential VM on FortiGate.
+      name: confidential_vm
+      varType: bool
+    - defaultValue: false
+      description: Enable Shielded VM on FortiGate.
+      name: shielded_vm
+      varType: bool
+    - defaultValue: true
+      description: Enable log disk
+      name: enable_log_disk
+      varType: bool
+    - defaultValue: "30"
+      description: The boot disk size for the VM instance in GBs
+      name: log_disk_size
+      varType: string
+    - defaultValue: pd-ssd
+      description: The boot disk type for the VM instance.
+      name: log_disk_type
+      varType: string
+    - defaultValue: true
+      description: Enable network traffic over port 22
+      name: enable_tcp_22
+      varType: bool
+    - defaultValue: true
+      description: Enable network traffic over port 80
+      name: enable_tcp_80
+      varType: bool
+    - defaultValue: true
+      description: Enable network traffic over port 443
+      name: enable_tcp_443
+      varType: bool
+    - defaultValue: true
+      description: Enable network traffic over port 541
+      name: enable_tcp_541
+      varType: bool
+    - defaultValue: true
+      description: Enable network traffic over port 3000
+      name: enable_tcp_3000
+      varType: bool
+    - defaultValue: true
+      description: Enable network traffic over port 3000
+      name: enable_tcp_8080
+      varType: bool
+    - defaultValue:
+      - EPHEMERAL
+      description: The external IPs assigned to the VM for public access.
+      name: external_ips
+      varType: list(string)
+    - description: The name of the deployment and VM instance.
+      name: goog_cm_deployment_name
+      required: true
+      varType: string
+    - defaultValue: n2-standard-4
+      description: The machine type to create, e.g. e2-small
+      name: machine_type
+      varType: string
+    - defaultValue:
+      - default
+      description: The network name to attach the VM instance.
+      name: networks
+      varType: list(string)
+    - description: The ID of the project in which to provision resources.
+      name: project_id
+      required: true
+      varType: string
+    - defaultValue: projects/mpi-fortigcp-project-001/global/images/fortinet-fgt-762-20250130-001-w-license
+      description: The image name for the disk for the VM instance.
+      name: source_image
+      varType: string
+    - defaultValue: []
+      description: The sub network name to attach the VM instance.
+      name: sub_networks
+      varType: list(string)
+    - defaultValue: 0.0.0.0/0
+      description: A comma separated string of source IP ranges for accessing the
+        VM instance over TCP port 8080.
+      name: tcp_8080_ip_source_ranges
+      required: true
+      varType: string
+    - defaultValue: 0.0.0.0/0
+      description: A comma separated string of source IP ranges for accessing the
+        VM instance over TCP port 3000.
+      name: tcp_3000_ip_source_ranges
+      required: true
+      varType: string
+    - defaultValue: 0.0.0.0/0
+      description: A comma separated string of source IP ranges for accessing the
+        VM instance over TCP port 541.
+      name: tcp_541_ip_source_ranges
+      required: true
+      varType: string
+    - defaultValue: 0.0.0.0/0
+      description: A comma separated string of source IP ranges for accessing the
+        VM instance over HTTPS port 443.
+      name: tcp_443_ip_source_ranges
+      required: true
+      varType: string
+    - defaultValue: 0.0.0.0/0
+      description: A comma separated string of source IP ranges for accessing the
+        VM instance over HTTP port 80.
+      name: tcp_80_ip_source_ranges
+      required: true
+      varType: string
+    - defaultValue: 0.0.0.0/0
+      description: A comma separated string of source IP ranges for accessing the
+        VM instance over HTTP port 22.
+      name: tcp_22_ip_source_ranges
+      required: true
+      varType: string
+    - defaultValue: us-central1-b
+      description: The zone for the solution to be deployed.
+      name: zone
+      varType: string
+    - defaultValue: true
+      description: Enable IP Forward
+      name: enable_ip_forward
+      varType: bool
+    - defaultValue: ""
+      description: The service account for the FortiGate VM to call Google Cloud APIs
+      name: vm_service_account
+      varType: string
